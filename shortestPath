@@ -1,0 +1,52 @@
+function ShortestPath(strArr) { 
+
+  // code goes here  
+  const charCount = parseInt(strArr[0]);
+  const nodeList = strArr.slice(1, charCount+1);
+  const segmentsList = strArr.slice(charCount+1, strArr.length);
+  // console.log('nodeList',segmentsList, nodeList[nodeList.length-1] );
+  const getPossiblePaths = 
+  (nodeSegments, firstNode, lastNode ) => {
+    var routes = nodeSegments.filter(n=> n.startsWith(firstNode));
+    // console.log('rts', routes);
+    const formedRoutes = routes.map(r=> {
+      var tempFirst = r[0];
+      var tempLast = r[2];
+      const addedSeg = [`${r}`];
+        var tempNextSegment =
+      nodeSegments.find(n=> n.startsWith(tempLast));
+      do{
+        tempNextSegment =
+      nodeSegments.find(n=> n.startsWith(tempLast));
+      if(tempNextSegment) {
+      addedSeg.push(tempNextSegment);
+      tempLast = 
+      tempNextSegment[tempNextSegment.length-1];
+      }
+      } while(tempNextSegment && tempLast !== lastNode)
+   
+      return addedSeg;
+
+    })
+
+    return formedRoutes;
+  }
+
+  const paths = getPossiblePaths(segmentsList,
+   nodeList[0], nodeList[nodeList.length-1]);
+   const pathSizeArr = paths.map((p: string)=> p.length);
+  const shortestPathIndex = 
+  pathSizeArr.findIndex(p => p === Math.min(...pathSizeArr))
+  // console.log('spind', segmentsList, pathSizeArr, shortestPathIndex)
+  const shortestPath =paths[shortestPathIndex];
+  const straightPath = 
+  shortestPath.map((s, sIndex)=> 
+  sIndex? s[s.length-1] : s).join('-');
+  return straightPath; 
+
+}
+   
+
+// keep this function call here 
+// @ts-ignore
+console.log(ShortestPath(readline()))
